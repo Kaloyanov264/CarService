@@ -20,5 +20,12 @@ namespace CarService.DL.Repositories
         {
             return StaticDb.Cars;
         }
+
+        public Car? GetById(int id)
+        {
+            return StaticDb.Cars
+                .FirstOrDefault(c => 
+                c.Id == id);
+        }
     }
 }
