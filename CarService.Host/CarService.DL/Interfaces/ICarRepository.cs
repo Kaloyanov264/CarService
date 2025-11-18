@@ -9,5 +9,7 @@ namespace CarService.DL.Interfaces
         void DeleteCar(int id);
 
         List<Car> GetAllCars();
+
+        Car? GetById(int id);
     }
 }

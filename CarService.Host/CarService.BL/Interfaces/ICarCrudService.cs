@@ -2,12 +2,14 @@
 
 namespace CarService.BL.Interfaces
 {
-    public interface ICarService
+    public interface ICarCrudService
     {
         void AddCar(Car car);
 
         void DeleteCar(int id);
 
         List<Car> GetAllCars();
+
+        Car? GetById(int id);
     }
 }

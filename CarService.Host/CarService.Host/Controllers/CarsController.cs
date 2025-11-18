@@ -1,7 +1,6 @@
 ﻿using CarService.BL.Interfaces;
-using Microsoft.AspNetCore.Http;
+using CarService.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.X509Certificates;
 
 namespace CarService.Host.Controllers
 {
@@ -9,19 +8,67 @@ namespace CarService.Host.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly ICarService _carService;
+        private readonly ICarCrudService _carCrudService;
 
-        public CarsController(ICarService carService)
+        public CarsController(ICarCrudService carService)
         {
-            _carService = carService;
+            _carCrudService = carService;
         }
 
-        [HttpGet]
-
-        public IActionResult GetAllCars()
+        [HttpGet(nameof(GetAll))]
+        public IActionResult GetAll()
         {
-            var cars = _carService.GetAllCars();
+            var cars = _carCrudService.GetAllCars();
             return Ok(cars);
+        }
+
+        [HttpPost]
+        public IActionResult AddCar([FromBody] Car? car)
+        {
+            if (car == null)
+            {
+                return BadRequest("Car data is null.");
+            }
+
+            _carCrudService.AddCar(car);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteCar(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Id must be greater than 0.");
+            }
+
+            var car = _carCrudService.GetById(id);
+            if (car == null)
+            {
+                return NotFound($"Car with ID {id} not found.");    
+            }
+
+            _carCrudService.DeleteCar(id);
+
+            return Ok();
+        }
+
+        [HttpGet(nameof(GetById))]
+        public IActionResult GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Id must be greater than 0.");
+            }
+
+            var car = _carCrudService.GetById(id);
+           
+            if (car == null)
+            {
+                return NotFound($"Car with ID {id} not found.");
+            }
+            return Ok(car);
         }
     }
 }

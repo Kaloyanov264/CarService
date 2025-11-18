@@ -4,11 +4,11 @@ using CarService.Models.Dto;
 
 namespace CarService.BL.Services
 {
-    internal class CarService : ICarService
+    internal class CarCrudService : ICarCrudService
     {
         private readonly ICarRepository _carRepository;
 
-        public CarService(ICarRepository carRepository)
+        public CarCrudService(ICarRepository carRepository)
         {
                 _carRepository = carRepository;
         }
@@ -26,6 +26,11 @@ namespace CarService.BL.Services
         public List<Car> GetAllCars()
         {
             return _carRepository.GetAllCars();
+        }
+
+        public Car? GetById(int id)
+        {
+            return _carRepository.GetById(id);
         }
     }
 }
