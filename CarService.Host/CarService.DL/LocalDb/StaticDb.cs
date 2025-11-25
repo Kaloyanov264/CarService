@@ -26,6 +26,13 @@ namespace CarService.DL.LocalDb
                     Id = Guid.NewGuid(),
                     Name = "Ivan Borisov",
                     Email = "ib@gmail.com"
+                },
+
+                new Customer
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Maria Ivanova",
+                    Email = "mi@gmail.com"
                 }
             };
     }

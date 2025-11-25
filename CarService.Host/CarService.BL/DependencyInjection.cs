@@ -9,8 +9,9 @@ namespace CarService.BL
         public static IServiceCollection AddBusinessLayer(this IServiceCollection services)
         {
             // Register your data layer services here
-            services.AddSingleton<ICarCrudService, 
-                CarCrudService>();
+            services
+                .AddSingleton<ICarCrudService, CarCrudService>()
+                .AddSingleton<ICustomerCrudService, CustomerCrudService>();
             return services;
         }
     }

@@ -11,5 +11,7 @@ namespace CarService.BL.Interfaces
         List<Car> GetAllCars();
 
         Car? GetById(int id);
+
+        void UpdateCar(Car car);
     }
 }

@@ -27,5 +27,15 @@ namespace CarService.DL.Repositories
                 .FirstOrDefault(c => 
                 c.Id == id);
         }
+
+        public void UpdateCar(Car car)
+        {
+            var existingCar = GetById(car.Id);
+            if (existingCar != null)
+            {
+                existingCar.Model = car.Model;
+                existingCar.Year = car.Year;
+            }
+        }
     }
 }
