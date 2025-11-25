@@ -1,9 +1,4 @@
 ﻿using CarService.Models.Dto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarService.BL.Interfaces
 {
@@ -13,6 +8,10 @@ namespace CarService.BL.Interfaces
 
         void DeleteCustomer(Guid id);
 
+        List<Customer> GetAllCustomers();
+
         Customer? GetById(Guid id);
+
+        void UpdateCustomer(Customer customer);
     }
 }

@@ -2,12 +2,16 @@
 
 namespace CarService.DL.Interfaces
 {
-    internal interface ICustomerRepository
+    public interface ICustomerRepository
     {
         void AddCustomer(Customer customer);
 
         void DeleteCustomer(Guid id);
 
+        List<Customer> GetAllCustomers();
+
         Customer? GetById(Guid id);
+
+        void UpdateCustomer(Customer customer);
     }
 }
