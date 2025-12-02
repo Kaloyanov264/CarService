@@ -44,11 +44,11 @@ namespace CarService.Host.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteCar(int id)
+        public IActionResult DeleteCar(Guid id)
         {
-            if (id <= 0)
+            if (id == Guid.Empty)
             {
-                return BadRequest("Id must be greater than 0.");
+                return BadRequest("Id must be a valid Guid.");
             }
 
             var car = _carCrudService.GetById(id);
@@ -63,11 +63,11 @@ namespace CarService.Host.Controllers
         }
 
         [HttpGet(nameof(GetById))]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(Guid id)
         {
-            if (id <= 0)
+            if (id == Guid.Empty)
             {
-                return BadRequest("Id must be greater than 0.");
+                return BadRequest("Id must be a valid Guid.");
             }
 
             var car = _carCrudService.GetById(id);
