@@ -15,10 +15,17 @@ namespace CarService.BL.Services
 
         public void AddCar(Car car)
         {
+            if (car == null) return;
+
+            if (car?.Id == null || car.Id == Guid.Empty)
+            {
+                car!.Id = Guid.NewGuid();
+            }   
+
             _carRepository.AddCar(car);
         }
 
-        public void DeleteCar(int id)
+        public void DeleteCar(Guid id)
         {
             _carRepository.DeleteCar(id);
         }
@@ -28,7 +35,7 @@ namespace CarService.BL.Services
             return _carRepository.GetAllCars();
         }
 
-        public Car? GetById(int id)
+        public Car? GetById(Guid id)
         {
             return _carRepository.GetById(id);
         }

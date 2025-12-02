@@ -20,7 +20,7 @@ namespace CarService.Host
             // Add services to the container.
 
             builder.Services
-                .AddDataLayer()
+                .AddDataLayer(builder.Configuration)
                 .AddBusinessLayer();
 
             builder.Services.AddMapster();
