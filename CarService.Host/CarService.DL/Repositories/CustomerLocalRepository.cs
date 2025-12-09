@@ -16,12 +16,12 @@ namespace CarService.DL.Repositories
             StaticDb.Customers.Add(customer);
         }
 
-        public void DeleteCustomer(Guid id)
+        public void DeleteCustomer(Guid? id)
         {
             StaticDb.Customers.RemoveAll(c => c.Id == id);
         }
 
-        public Customer? GetById(Guid id)
+        public Customer? GetById(Guid? id)
         {
             return StaticDb.Customers
                 .FirstOrDefault(c =>

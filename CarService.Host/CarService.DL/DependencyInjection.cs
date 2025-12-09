@@ -19,7 +19,7 @@ namespace CarService.DL
             services
                 .AddConfigurations(configs)
                 .AddSingleton<ICarRepository, CarMongoRepository>()
-                .AddSingleton<ICustomerRepository, CustomerLocalRepository>();
+                .AddSingleton<ICustomerRepository, CustomerMongoRepository>();
 
             return services;
         }
