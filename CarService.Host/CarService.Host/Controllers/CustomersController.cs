@@ -1,5 +1,9 @@
 ﻿using CarService.BL.Interfaces;
 using CarService.Models.Dto;
+using CarService.Models.Requests;
+using FluentValidation;
+using MapsterMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarService.Host.Controllers
@@ -10,10 +14,14 @@ namespace CarService.Host.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerCrudService _customerCrudService;
+        private IValidator<AddCustomerRequest> _validator;
+        private readonly IMapper _mapper;
 
-        public CustomersController(ICustomerCrudService customerCrudService)
+        public CustomersController(ICustomerCrudService customerCrudService, IValidator<AddCustomerRequest> validator, IMapper mapper)
         {
             _customerCrudService = customerCrudService;
+            _validator = validator;
+            _mapper = mapper;
         }
 
         [HttpGet(nameof(GetAll))]
@@ -24,12 +32,21 @@ namespace CarService.Host.Controllers
         }
 
         [HttpPost(nameof(AddCustomer))]
-        public IActionResult AddCustomer([FromBody] Customer? customer)
+        public IActionResult AddCustomer([FromBody] AddCustomerRequest? customerRequest)
         {
-            if (customer == null)
+            if (customerRequest == null)
             {
                 return BadRequest("Customer data is null.");
             }
+
+            var result = _validator.Validate(customerRequest);
+
+            if (!result.IsValid)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            var customer = _mapper.Map<Customer>(customerRequest);
 
             _customerCrudService.AddCustomer(customer);
 

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\CarService.DL\CarService.DL.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="CarService.Tests" />
+	</ItemGroup>
+	
 </Project>
