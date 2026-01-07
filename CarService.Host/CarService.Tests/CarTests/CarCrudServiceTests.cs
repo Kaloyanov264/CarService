@@ -50,5 +50,82 @@ namespace CarService.Tests.CarTests
             Assert.Equal(expectedCarCount, CarMockedData.Cars.Count);
             Assert.Equal(id, resultCar.Id);
         }
+
+        [Fact]
+        public void DeleteCarTest_Ok()
+        {
+            // setup
+            var carToDelete = CarMockedData.Cars.First();
+            var initialCarCount = CarMockedData.Cars.Count;
+
+            _carRepositoryMock
+                .Setup(repo => repo.DeleteCar(carToDelete.Id))
+                .Callback(() =>
+                {
+                    var car = CarMockedData.Cars.FirstOrDefault(c => c.Id == carToDelete.Id);
+                    if (car != null)
+                    {
+                        CarMockedData.Cars.Remove(car);
+                    }
+                });
+
+            // inject
+            var service = new CarCrudService(_carRepositoryMock.Object);
+
+            // act
+            service.DeleteCar(carToDelete.Id);
+
+            var deletedCar = CarMockedData.Cars.FirstOrDefault(c => c.Id == carToDelete.Id);
+
+            // assert
+            Assert.Null(deletedCar);
+            Assert.Equal(initialCarCount - 1, CarMockedData.Cars.Count);
+        }
+
+        [Fact]
+        public void UpdateCarTest_Ok()
+        {
+            // setup
+            var existingCar = CarMockedData.Cars.First();
+            var updatedModel = "Corolla";
+            var updatedYear = 2022;
+            var expectedCarCount = CarMockedData.Cars.Count;
+
+            var updatedCar = new Car
+            {
+                Id = existingCar.Id,
+                Model = updatedModel,
+                Year = updatedYear
+            };
+
+            _carRepositoryMock
+                .Setup(repo => repo.UpdateCar(updatedCar))
+                .Callback(() =>
+                {
+                    var car = CarMockedData.Cars
+                        .FirstOrDefault(c => c.Id == updatedCar.Id);
+
+                    if (car != null)
+                    {
+                        car.Model = updatedCar.Model;
+                        car.Year = updatedCar.Year;
+                    }
+                });
+
+            // inject
+            var service = new CarCrudService(_carRepositoryMock.Object);
+
+            // act
+            service.UpdateCar(updatedCar);
+
+            var resultCar = CarMockedData.Cars
+                .FirstOrDefault(c => c.Id == updatedCar.Id);
+
+            // assert
+            Assert.NotNull(resultCar);
+            Assert.Equal(updatedModel, resultCar.Model);
+            Assert.Equal(updatedYear, resultCar.Year);
+            Assert.Equal(expectedCarCount, CarMockedData.Cars.Count);
+        }
     }
 }

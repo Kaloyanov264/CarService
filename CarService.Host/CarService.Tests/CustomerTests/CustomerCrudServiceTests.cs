@@ -49,5 +49,85 @@ namespace CarService.Tests.CustomerTests
             Assert.Equal(expectedCustomerCount, CustomerMockedData.Customers.Count);
             Assert.Equal(id, resultCustomer.Id);
         }
+
+        [Fact]
+        public void DeleteCustomerTest_Ok()
+        {
+            // setup
+            var customerToDelete = CustomerMockedData.Customers.First();
+            var expectedCustomerCount = CustomerMockedData.Customers.Count - 1;
+
+            _customerRepositoryMock
+                .Setup(repo => repo.DeleteCustomer(customerToDelete.Id))
+                .Callback(() =>
+                {
+                    var customer = CustomerMockedData.Customers
+                        .FirstOrDefault(c => c.Id == customerToDelete.Id);
+
+                    if (customer != null)
+                    {
+                        CustomerMockedData.Customers.Remove(customer);
+                    }
+                });
+
+            // inject
+            var service = new CustomerCrudService(_customerRepositoryMock.Object);
+
+            // act
+            service.DeleteCustomer(customerToDelete.Id);
+
+            var deletedCustomer = CustomerMockedData.Customers
+                .FirstOrDefault(c => c.Id == customerToDelete.Id);
+
+            // assert
+            Assert.Null(deletedCustomer);
+            Assert.Equal(expectedCustomerCount, CustomerMockedData.Customers.Count);
+        }
+
+        [Fact]
+        public void UpdateCustomerTest_Ok()
+        {
+            // setup
+            var existingCustomer = CustomerMockedData.Customers.First();
+            var updatedName = "Jane Doe";
+            var updatedEmail = "jane@xxx.com";
+            var expectedCustomerCount = CustomerMockedData.Customers.Count;
+
+            var updatedCustomer = new Customer
+            {
+                Id = existingCustomer.Id,
+                Name = updatedName,
+                Email = updatedEmail
+            };
+
+            _customerRepositoryMock
+                .Setup(repo => repo.UpdateCustomer(updatedCustomer))
+                .Callback(() =>
+                {
+                    var customer = CustomerMockedData.Customers
+                        .FirstOrDefault(c => c.Id == updatedCustomer.Id);
+
+                    if (customer != null)
+                    {
+                        customer.Name = updatedCustomer.Name;
+                        customer.Email = updatedCustomer.Email;
+                    }
+                });
+
+            // inject
+            var service = new CustomerCrudService(_customerRepositoryMock.Object);
+
+            // act
+            service.UpdateCustomer(updatedCustomer);
+
+            var resultCustomer = CustomerMockedData.Customers
+                .FirstOrDefault(c => c.Id == updatedCustomer.Id);
+
+            // assert
+            Assert.NotNull(resultCustomer);
+            Assert.Equal(updatedName, resultCustomer.Name);
+            Assert.Equal(updatedEmail, resultCustomer.Email);
+            Assert.Equal(expectedCustomerCount, CustomerMockedData.Customers.Count);
+        }
     }
 }
