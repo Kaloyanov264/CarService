@@ -44,8 +44,8 @@ namespace CarService.Host
 
             builder.Services
                 .AddHealthChecks()
-                .AddCheck<MyCustomHealthcheck>("sample")
-                .AddCheck<MongoHealthcheck>("sample");
+                .AddCheck<MyCustomHealthcheck>("sample1")
+                .AddCheck<MongoHealthcheck>("sample2");
 
             var app = builder.Build();
 

@@ -84,7 +84,24 @@ namespace CarService.DL.Repositories
 
         public void UpdateCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            if (customer == null || customer.Id == Guid.Empty) return;
+
+            try
+            {
+                var result = _customerCollection.ReplaceOne(
+                    c => c.Id == customer.Id,
+                    customer
+                );
+
+                if (result.MatchedCount == 0)
+                {
+                    _logger.LogWarning($"No customer found with ID: {customer.Id} to update.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error in method {nameof(UpdateCustomer)}:{e.Message}-{e.StackTrace}");
+            }
         }
     }
 }
