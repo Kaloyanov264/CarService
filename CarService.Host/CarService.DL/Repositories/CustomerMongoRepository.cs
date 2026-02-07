@@ -10,12 +10,12 @@ namespace CarService.DL.Repositories
     internal class CustomerMongoRepository : ICustomerRepository
     {
         private readonly IOptionsMonitor<MongoDbConfiguration> _mongoDbConfiguration;
-        private readonly ILogger<CarMongoRepository> _logger;
+        private readonly ILogger<CustomerMongoRepository> _logger;
         private readonly IMongoCollection<Customer> _customerCollection;
 
         public CustomerMongoRepository(
             IOptionsMonitor<MongoDbConfiguration> mongoDbConfiguration,
-            ILogger<CarMongoRepository> logger)
+            ILogger<CustomerMongoRepository> logger)
         {
             _mongoDbConfiguration = mongoDbConfiguration;
             _logger = logger;
@@ -37,7 +37,7 @@ namespace CarService.DL.Repositories
             }
             catch (Exception e)
             {
-                _logger.LogError("Error adding car to DB:{0}-{1}", e.Message, e.StackTrace);
+                _logger.LogError("Error adding customer to DB:{0}-{1}", e.Message, e.StackTrace);
             }
         }
 
