@@ -28,13 +28,13 @@ namespace CarService.DL.Repositories
             _carsCollection = database.GetCollection<Car>($"{nameof(Car)}s");
         }
 
-        public void AddCar(Car car)
+        public async Task AddCar(Car? car)
         {
             if (car == null) return;
 
             try
             {
-                _carsCollection.InsertOne(car);
+                await _carsCollection.InsertOneAsync(car);
             }
             catch (Exception e)
             {
@@ -42,13 +42,13 @@ namespace CarService.DL.Repositories
             }
         }
 
-        public void DeleteCar(Guid? id)
+        public async Task DeleteCar(Guid? id)
         {
             if (id == null || id == Guid.Empty) return;
 
             try
             {
-                var result = _carsCollection.DeleteOne(c => c.Id == id);
+                var result = await _carsCollection.DeleteOneAsync(c => c.Id == id);
 
                 if (result.DeletedCount == 0)
                 {
@@ -61,19 +61,26 @@ namespace CarService.DL.Repositories
             }
         }
 
-        public List<Car> GetAllCars()
+        public async Task<List<Car>> GetAllCars()
         {
-            return _carsCollection.Find(_ => true).ToList();
+            try
+            {
+                return await _carsCollection.Find(_ => true).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error in method {nameof(GetAllCars)}:{e.Message}-{e.StackTrace}");
+                return new List<Car>();
+            }
         }
 
-        public Car? GetById(Guid? id)
+        public async Task<Car?> GetById(Guid? id)
         {
             if (id == null || id == Guid.Empty) return default;
 
             try
             {
-                return _carsCollection.Find(c => c.Id == id)
-                    .FirstOrDefault();
+                return await _carsCollection.Find(c => c.Id == id).FirstOrDefaultAsync();
             }
             catch (Exception e)
             {
@@ -83,20 +90,20 @@ namespace CarService.DL.Repositories
             return default;
         }
 
-        public void UpdateCar(Car car)
+        public async Task UpdateCar(Car car)
         {
             if (car == null || car.Id == Guid.Empty) return;
 
             try
             {
-                var result = _carsCollection.ReplaceOne(
+                var result = await _carsCollection.ReplaceOneAsync(
                     c => c.Id == car.Id,
                     car
                 );
 
                 if (result.MatchedCount == 0)
                 {
-                    _logger.LogWarning($"No customer found with ID: {car.Id} to update.");
+                    _logger.LogWarning($"No car found with ID: {car.Id} to update.");
                 }
             }
             catch (Exception e)
