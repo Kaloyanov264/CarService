@@ -4,6 +4,6 @@ namespace CarService.BL.Interfaces
 {
     public interface ISellCar
     {
-        SellCarResult Sell(Guid carId, Guid customerId);
+        Task<SellCarResult> Sell(Guid carId, Guid customerId);
     }
 }

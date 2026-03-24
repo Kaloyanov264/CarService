@@ -26,14 +26,14 @@ namespace CarService.Host.Controllers
         }
 
         [HttpGet(nameof(GetAll))]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var cars = _carCrudService.GetAllCars();
+            var cars = await _carCrudService.GetAllCars();
             return Ok(cars);
         }
 
         [HttpPost(nameof(AddCar))]
-        public IActionResult AddCar([FromBody] AddCarRequest? carRequest)
+        public async Task<IActionResult> AddCar([FromBody] AddCarRequest? carRequest)
         {
             if (carRequest == null)
             {
@@ -49,13 +49,13 @@ namespace CarService.Host.Controllers
 
             var car = _mapper.Map<Car>(carRequest);
 
-            _carCrudService.AddCar(car);
+            await _carCrudService.AddCar(car);
 
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult DeleteCar(Guid id)
+        public async Task<IActionResult> DeleteCar(Guid id)
         {
             if (id == Guid.Empty)
             {
@@ -68,20 +68,20 @@ namespace CarService.Host.Controllers
                 return NotFound($"Car with ID {id} not found.");    
             }
 
-            _carCrudService.DeleteCar(id);
+            await _carCrudService.DeleteCar(id);
 
             return Ok();
         }
 
         [HttpGet(nameof(GetById))]
-        public IActionResult GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             if (id == Guid.Empty)
             {
                 return BadRequest("Id must be a valid Guid.");
             }
 
-            var car = _carCrudService.GetById(id);
+            var car = await _carCrudService.GetById(id);
            
             if (car == null)
             {
@@ -91,7 +91,7 @@ namespace CarService.Host.Controllers
         }
 
         [HttpPost(nameof(UpdateCar))]
-        public IActionResult UpdateCar([FromBody] Car? car)
+        public async Task<IActionResult> UpdateCar([FromBody] Car? car)
         {
             if (car == null)
             {
@@ -102,7 +102,7 @@ namespace CarService.Host.Controllers
             {
                 return NotFound($"Car with ID {car.Id} not found.");
             }
-            _carCrudService.UpdateCar(car);
+            await _carCrudService.UpdateCar(car);
             return Ok();
         }
     }

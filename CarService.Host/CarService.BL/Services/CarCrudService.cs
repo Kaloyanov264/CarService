@@ -13,7 +13,7 @@ namespace CarService.BL.Services
                 _carRepository = carRepository;
         }
 
-        public void AddCar(Car car)
+        public async Task AddCar(Car car)
         {
             if (car == null) return;
 
@@ -22,27 +22,27 @@ namespace CarService.BL.Services
                 car!.Id = Guid.NewGuid();
             }   
 
-            _carRepository.AddCar(car);
+            await _carRepository.AddCar(car);
         }
 
-        public void DeleteCar(Guid id)
+        public async Task DeleteCar(Guid id)
         {
-            _carRepository.DeleteCar(id);
+            await _carRepository.DeleteCar(id);
         }
 
-        public List<Car> GetAllCars()
+        public async Task<List<Car>> GetAllCars()
         {
-            return _carRepository.GetAllCars();
+            return await _carRepository.GetAllCars();
         }
 
-        public Car? GetById(Guid id)
+        public async Task<Car?> GetById(Guid id)
         {
-            return _carRepository.GetById(id);
+            return await _carRepository.GetById(id);
         }
 
-        public void UpdateCar(Car car)
+        public async Task UpdateCar(Car car)
         {
-            _carRepository.UpdateCar(car);
+            await _carRepository.UpdateCar(car);
         }
     }
 }

@@ -25,14 +25,14 @@ namespace CarService.Host.Controllers
         }
 
         [HttpGet(nameof(GetAll))]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var customers = _customerCrudService.GetAllCustomers();
+            var customers = await _customerCrudService.GetAllCustomers();
             return Ok(customers);
         }
 
         [HttpPost(nameof(AddCustomer))]
-        public IActionResult AddCustomer([FromBody] AddCustomerRequest? customerRequest)
+        public async Task<IActionResult> AddCustomer([FromBody] AddCustomerRequest? customerRequest)
         {
             if (customerRequest == null)
             {
@@ -48,13 +48,13 @@ namespace CarService.Host.Controllers
 
             var customer = _mapper.Map<Customer>(customerRequest);
 
-            _customerCrudService.AddCustomer(customer);
+            await _customerCrudService.AddCustomer(customer);
 
             return Ok();
         }
 
         [HttpDelete]
-        public IActionResult DeleteCustomer(Guid id)
+        public async Task<IActionResult> DeleteCustomer(Guid id)
         {
             var customer = _customerCrudService.GetById(id);
             if (customer == null)
@@ -62,15 +62,15 @@ namespace CarService.Host.Controllers
                 return NotFound($"Customer with ID {id} not found.");
             }
 
-            _customerCrudService.DeleteCustomer(id);
+            await _customerCrudService.DeleteCustomer(id);
 
             return Ok();
         }
 
         [HttpGet(nameof(GetById))]
-        public IActionResult GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var customer = _customerCrudService.GetById(id);
+            var customer = await _customerCrudService.GetById(id);
 
             if (customer == null)
             {
@@ -80,7 +80,7 @@ namespace CarService.Host.Controllers
         }
 
         [HttpPost(nameof(UpdateCustomer))]
-        public IActionResult UpdateCustomer([FromBody] Customer? customer)
+        public async Task<IActionResult> UpdateCustomer([FromBody] Customer? customer)
         {
             if (customer == null)
             {
@@ -91,7 +91,7 @@ namespace CarService.Host.Controllers
             {
                 return NotFound($"Customer with ID {customer.Id} not found.");
             }
-            _customerCrudService.UpdateCustomer(customer);
+            await _customerCrudService.UpdateCustomer(customer);
             return Ok();
         }
     }
